@@ -29,10 +29,15 @@ var PsCmd = &cobra.Command{
 			if !showAll && vm.Status != "running" {
 				continue
 			}
+
+			if vm.IsTemplate {
+				continue
+			}
+
 			filteredVMs = append(filteredVMs, vm)
 		}
 
-		fmt.Printf("%-8s %-30s %-10s\n", "VM ID", "Name", "Status")
+		fmt.Printf("%-8s %-30s %-10s\n", "VM ID", "NAME", "STATUS")
 
 		for _, vm := range filteredVMs {
 			name := vm.Name

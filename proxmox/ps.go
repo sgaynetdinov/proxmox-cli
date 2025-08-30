@@ -7,9 +7,10 @@ import (
 )
 
 type VM struct {
-	ID     int
-	Name   string
-	Status string
+	ID         int
+	Name       string
+	Status     string
+	IsTemplate bool
 }
 
 func VMList(client *pveSDK.Client) ([]VM, error) {
@@ -37,10 +38,16 @@ func VMList(client *pveSDK.Client) ([]VM, error) {
 			status = s
 		}
 
+		var isTemplate bool
+		if t, ok := vmInfo["template"].(float64); ok {
+			isTemplate = t == 1
+		}
+
 		vms = append(vms, VM{
-			ID:     id,
-			Name:   name,
-			Status: status,
+			ID:         id,
+			Name:       name,
+			Status:     status,
+			IsTemplate: isTemplate,
 		})
 	}
 	return vms, nil
