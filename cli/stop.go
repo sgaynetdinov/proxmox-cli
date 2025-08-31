@@ -11,25 +11,37 @@ import (
 )
 
 var StopCmd = &cobra.Command{
-	Use:   "stop <VM_ID>",
-	Short: "Stop a virtual machine",
-	Long:  `Stop a virtual machine by its ID`,
-	Args:  cobra.ExactArgs(1),
+	Use:   "stop <VM_ID> [VM_ID...]",
+	Short: "Stop one or more virtual machines",
+	Long:  `Stop one or more virtual machines by their IDs`,
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		vmID, err := strconv.Atoi(args[0])
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: Invalid VM ID '%s'. VM ID must be a number.\n", args[0])
-			os.Exit(1)
+		// Parse all VM IDs first
+		var vmIDs []int
+		for _, arg := range args {
+			vmID, err := strconv.Atoi(arg)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error: Invalid VM ID '%s'. VM ID must be a number.\n", arg)
+				os.Exit(1)
+			}
+			vmIDs = append(vmIDs, vmID)
 		}
 
 		client := proxmox.Login(cmd.Context())
 
-		err = proxmox.StopVM(client, vmID)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error stopping VM %d: %v\n", vmID, err)
-			os.Exit(1)
+		hasErrors := false
+		for _, vmID := range vmIDs {
+			err := proxmox.StopVM(client, vmID)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error stopping VM %d: %v\n", vmID, err)
+				hasErrors = true
+			} else {
+				fmt.Printf("VM %d stopped successfully\n", vmID)
+			}
 		}
 
-		fmt.Printf("VM %d stopped successfully\n", vmID)
+		if hasErrors {
+			os.Exit(1)
+		}
 	},
 }
