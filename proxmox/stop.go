@@ -20,6 +20,6 @@ func StopVM(client *pveSDK.Client, vmID int) error {
 		return fmt.Errorf("VM %d is already stopped", vmID)
 	}
 
-	_, err = client.StopVm(context.Background(), vmr)
+	err = vmr.Stop(context.Background(), client)
 	return err
 }
