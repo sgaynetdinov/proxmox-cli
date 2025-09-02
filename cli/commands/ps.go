@@ -1,9 +1,10 @@
-package cli
+package commands
 
 import (
 	"fmt"
 	"os"
 
+	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
 	"github.com/spf13/cobra"
@@ -14,7 +15,7 @@ var PsCmd = &cobra.Command{
 	Short: "List virtual machines",
 	Long:  `List all virtual machines from Proxmox VE. By default shows only running VMs.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		client := GetClientFromContext(cmd)
+		client := utils.GetClientFromContext(cmd)
 
 		vms, err := proxmox.VMList(client)
 		if err != nil {

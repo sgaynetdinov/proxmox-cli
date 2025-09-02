@@ -1,4 +1,4 @@
-package cli
+package utils
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func parseVMIDs(args []string) []int {
+func ParseVMIDs(args []string) []int {
 	var vmIDs []int
 	for _, arg := range args {
 		vmID, err := strconv.Atoi(arg)
@@ -19,7 +19,7 @@ func parseVMIDs(args []string) []int {
 	return vmIDs
 }
 
-func executeVMOperations(vmIDs []int, operation func(int) error, successMessage func(int) string) {
+func ExecuteVMOperations(vmIDs []int, operation func(int) error, successMessage func(int) string) {
 	hasErrors := false
 	for _, vmID := range vmIDs {
 		err := operation(vmID)

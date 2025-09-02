@@ -1,8 +1,9 @@
-package cli
+package commands
 
 import (
 	"fmt"
 
+	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
 	"github.com/spf13/cobra"
@@ -14,10 +15,10 @@ var ShutdownCmd = &cobra.Command{
 	Long:  `Gracefully shutdown one or more virtual machines by their IDs. This sends an ACPI shutdown signal to the guest OS.`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		vmIDs := parseVMIDs(args)
-		client := GetClientFromContext(cmd)
+		vmIDs := utils.ParseVMIDs(args)
+		client := utils.GetClientFromContext(cmd)
 
-		executeVMOperations(vmIDs,
+		utils.ExecuteVMOperations(vmIDs,
 			func(vmID int) error {
 				return proxmox.ShutdownVM(client, vmID)
 			},

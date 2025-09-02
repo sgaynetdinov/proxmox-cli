@@ -1,8 +1,9 @@
-package cli
+package commands
 
 import (
 	"fmt"
 
+	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
 	"github.com/spf13/cobra"
@@ -14,10 +15,10 @@ var StartCmd = &cobra.Command{
 	Long:  `Start one or more virtual machines by their IDs`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		vmIDs := parseVMIDs(args)
-		client := GetClientFromContext(cmd)
+		vmIDs := utils.ParseVMIDs(args)
+		client := utils.GetClientFromContext(cmd)
 
-		executeVMOperations(vmIDs,
+		utils.ExecuteVMOperations(vmIDs,
 			func(vmID int) error {
 				return proxmox.StartVM(client, vmID)
 			},
