@@ -27,7 +27,7 @@ var StartCmd = &cobra.Command{
 			vmIDs = append(vmIDs, vmID)
 		}
 
-		client := proxmox.Login(cmd.Context())
+		client := GetClientFromContext(cmd)
 
 		hasErrors := false
 		for _, vmID := range vmIDs {

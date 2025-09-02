@@ -14,7 +14,7 @@ var PsCmd = &cobra.Command{
 	Short: "List virtual machines",
 	Long:  `List all virtual machines from Proxmox VE. By default shows only running VMs.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		client := proxmox.Login(cmd.Context())
+		client := GetClientFromContext(cmd)
 
 		vms, err := proxmox.VMList(client)
 		if err != nil {
