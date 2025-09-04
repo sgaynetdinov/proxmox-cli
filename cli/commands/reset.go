@@ -1,0 +1,30 @@
+package commands
+
+import (
+	"fmt"
+
+	"proxmox-cli/cli/utils"
+	"proxmox-cli/proxmox"
+
+	"github.com/spf13/cobra"
+)
+
+var ResetCmd = &cobra.Command{
+	Use:   "reset <VM_ID> [VM_ID...]",
+	Short: "Reset one or more virtual machines",
+	Long:  `Reset one or more virtual machines by their IDs. This performs a hard reset, equivalent to pressing the reset button.`,
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		vmIDs := utils.ParseVMIDs(args)
+		client := utils.GetClientFromContext(cmd)
+
+		utils.ExecuteVMOperations(vmIDs,
+			func(vmID int) error {
+				return proxmox.ResetVM(client, vmID)
+			},
+			func(vmID int) string {
+				return fmt.Sprintf("VM %d reset initiated successfully", vmID)
+			},
+		)
+	},
+}
