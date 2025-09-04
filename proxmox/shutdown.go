@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"proxmox-cli/proxmox/utils"
+
 	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 )
 
@@ -16,7 +18,7 @@ func ShutdownVM(client *pveSDK.Client, vmID int) error {
 	}
 
 	status := vmInfo["status"].(string)
-	if status == "stopped" {
+	if status == utils.VmStatusStoped {
 		return fmt.Errorf("VM %d is already stopped", vmID)
 	}
 
