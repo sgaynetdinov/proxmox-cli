@@ -1,6 +1,8 @@
 module proxmox-cli
 
-go 1.23.11
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
 	github.com/Telmate/proxmox-api-go v0.0.0-20250824214849-af879153effb
