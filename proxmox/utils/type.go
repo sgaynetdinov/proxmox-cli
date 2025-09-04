@@ -6,7 +6,7 @@ const (
 )
 
 const (
-	VmStatusStoped  = "stopped"
+	VmStatusStopped = "stopped"
 	VmStatusRunning = "running"
 	VmStatusUnknown = "unknown"
 )
