@@ -6,8 +6,16 @@ import (
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
+	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 	"github.com/spf13/cobra"
 )
+
+func stopMany(client *pveSDK.Client, vmIDs []int) {
+	utils.ExecuteVMOperations(vmIDs,
+		func(vmID int) error { return proxmox.StopVM(client, vmID) },
+		func(vmID int) string { return fmt.Sprintf("VM %d stopped successfully", vmID) },
+	)
+}
 
 var StopCmd = &cobra.Command{
 	Use:   "stop <VM_ID> [VM_ID...]",
@@ -18,13 +26,6 @@ var StopCmd = &cobra.Command{
 		vmIDs := utils.ParseVMIDs(args)
 		client := utils.GetClientFromContext(cmd)
 
-		utils.ExecuteVMOperations(vmIDs,
-			func(vmID int) error {
-				return proxmox.StopVM(client, vmID)
-			},
-			func(vmID int) string {
-				return fmt.Sprintf("VM %d stopped successfully", vmID)
-			},
-		)
+		stopMany(client, vmIDs)
 	},
 }
