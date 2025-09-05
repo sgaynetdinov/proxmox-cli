@@ -6,8 +6,16 @@ import (
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
+	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 	"github.com/spf13/cobra"
 )
+
+func resetMany(client *pveSDK.Client, vmIDs []int) {
+	utils.ExecuteVMOperations(vmIDs,
+		func(vmID int) error { return proxmox.ResetVM(client, vmID) },
+		func(vmID int) string { return fmt.Sprintf("VM %d reset initiated successfully", vmID) },
+	)
+}
 
 var ResetCmd = &cobra.Command{
 	Use:   "reset <VM_ID> [VM_ID...]",
@@ -18,13 +26,6 @@ var ResetCmd = &cobra.Command{
 		vmIDs := utils.ParseVMIDs(args)
 		client := utils.GetClientFromContext(cmd)
 
-		utils.ExecuteVMOperations(vmIDs,
-			func(vmID int) error {
-				return proxmox.ResetVM(client, vmID)
-			},
-			func(vmID int) string {
-				return fmt.Sprintf("VM %d reset initiated successfully", vmID)
-			},
-		)
+		resetMany(client, vmIDs)
 	},
 }

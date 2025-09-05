@@ -6,8 +6,16 @@ import (
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
+	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 	"github.com/spf13/cobra"
 )
+
+func rebootMany(client *pveSDK.Client, vmIDs []int) {
+	utils.ExecuteVMOperations(vmIDs,
+		func(vmID int) error { return proxmox.RebootVM(client, vmID) },
+		func(vmID int) string { return fmt.Sprintf("VM %d reboot initiated successfully", vmID) },
+	)
+}
 
 var RebootCmd = &cobra.Command{
 	Use:   "reboot <VM_ID> [VM_ID...]",
@@ -17,14 +25,16 @@ var RebootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		vmIDs := utils.ParseVMIDs(args)
 		client := utils.GetClientFromContext(cmd)
+		force, _ := cmd.Flags().GetBool("force")
 
-		utils.ExecuteVMOperations(vmIDs,
-			func(vmID int) error {
-				return proxmox.RebootVM(client, vmID)
-			},
-			func(vmID int) string {
-				return fmt.Sprintf("VM %d reboot initiated successfully", vmID)
-			},
-		)
+		if force {
+			resetMany(client, vmIDs)
+		} else {
+			rebootMany(client, vmIDs)
+		}
 	},
+}
+
+func init() {
+	RebootCmd.Flags().BoolP("force", "f", false, "Force reboot by issuing a hard reset")
 }
