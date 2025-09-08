@@ -3,12 +3,26 @@ package commands
 import (
 	"fmt"
 	"os"
+	"sort"
 
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
+	proxmox_utils "proxmox-cli/proxmox/utils"
 
 	"github.com/spf13/cobra"
 )
+
+func sortVmByStatus(filteredVMs []proxmox.VM) func(i, j int) bool {
+	return func(i, j int) bool {
+		if filteredVMs[i].Status == proxmox_utils.VmStatusRunning && filteredVMs[j].Status != proxmox_utils.VmStatusRunning {
+			return true
+		}
+		if filteredVMs[i].Status != proxmox_utils.VmStatusRunning && filteredVMs[j].Status == proxmox_utils.VmStatusRunning {
+			return false
+		}
+		return filteredVMs[i].ID < filteredVMs[j].ID
+	}
+}
 
 var PsCmd = &cobra.Command{
 	Use:   "ps",
@@ -27,7 +41,7 @@ var PsCmd = &cobra.Command{
 
 		var filteredVMs []proxmox.VM
 		for _, vm := range vms {
-			if !showAll && vm.Status != "running" {
+			if !showAll && vm.Status != proxmox_utils.VmStatusRunning {
 				continue
 			}
 
@@ -36,6 +50,10 @@ var PsCmd = &cobra.Command{
 			}
 
 			filteredVMs = append(filteredVMs, vm)
+		}
+
+		if showAll {
+			sort.SliceStable(filteredVMs, sortVmByStatus(filteredVMs))
 		}
 
 		fmt.Printf("%-8s %-30s %-10s %-5s\n", "VM ID", "NAME", "STATUS", "TYPE")
