@@ -6,8 +6,8 @@ const (
 )
 
 const (
-	VmStatusStopped = "stopped"
-	VmStatusRunning = "running"
-	VmStatusUnknown = "unknown"
+	VmStatusStopped   = "stopped"
+	VmStatusRunning   = "running"
+	VmStatusUnknown   = "unknown"
 	VmStatusPrelaunch = "prelaunch"
 )

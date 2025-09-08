@@ -38,14 +38,14 @@ var PsCmd = &cobra.Command{
 			filteredVMs = append(filteredVMs, vm)
 		}
 
-		fmt.Printf("%-8s %-30s %-10s\n", "VM ID", "NAME", "STATUS")
+		fmt.Printf("%-8s %-30s %-10s %-5s\n", "VM ID", "NAME", "STATUS", "TYPE")
 
 		for _, vm := range filteredVMs {
 			name := vm.Name
 			if name == "" {
 				name = "<no name>"
 			}
-			fmt.Printf("%-8d %-30s %-10s\n", vm.ID, name, vm.Status)
+			fmt.Printf("%-8d %-30s %-10s %-5s\n", vm.ID, name, vm.Status, vm.TypeVM)
 		}
 	},
 }
