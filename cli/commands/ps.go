@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strconv"
 
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
@@ -23,6 +24,8 @@ func sortVmByStatus(filteredVMs []proxmox.VM) func(i, j int) bool {
 		return filteredVMs[i].ID < filteredVMs[j].ID
 	}
 }
+
+var rowFormat = "%-8s %-30s %-10s %-5s %-10s\n"
 
 var PsCmd = &cobra.Command{
 	Use:   "ps",
@@ -56,14 +59,14 @@ var PsCmd = &cobra.Command{
 			sort.SliceStable(filteredVMs, sortVmByStatus(filteredVMs))
 		}
 
-		fmt.Printf("%-8s %-30s %-10s %-5s\n", "VM ID", "NAME", "STATUS", "TYPE")
+		fmt.Printf(rowFormat, "VM ID", "NAME", "STATUS", "TYPE", "NODE")
 
 		for _, vm := range filteredVMs {
 			name := vm.Name
 			if name == "" {
 				name = "<no name>"
 			}
-			fmt.Printf("%-8d %-30s %-10s %-5s\n", vm.ID, name, vm.Status, vm.TypeVM)
+			fmt.Printf(rowFormat, strconv.Itoa(vm.ID), name, vm.Status, vm.TypeVM, vm.Node)
 		}
 	},
 }

@@ -12,6 +12,7 @@ type VM struct {
 	Status     string
 	IsTemplate bool
 	TypeVM     string
+	Node       string
 }
 
 func VMList(client *pveSDK.Client) ([]VM, error) {
@@ -49,12 +50,18 @@ func VMList(client *pveSDK.Client) ([]VM, error) {
 			typeVM = t
 		}
 
+		var node string
+		if n, ok := vmInfo["node"].(string); ok {
+			node = n
+		}
+
 		vms = append(vms, VM{
 			ID:         id,
 			Name:       name,
 			Status:     status,
 			IsTemplate: isTemplate,
 			TypeVM:     typeVM,
+			Node:       node,
 		})
 	}
 	return vms, nil
