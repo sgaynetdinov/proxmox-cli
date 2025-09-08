@@ -9,4 +9,5 @@ const (
 	VmStatusStopped = "stopped"
 	VmStatusRunning = "running"
 	VmStatusUnknown = "unknown"
+	VmStatusPrelaunch = "prelaunch"
 )
