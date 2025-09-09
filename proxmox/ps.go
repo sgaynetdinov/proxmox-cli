@@ -13,6 +13,7 @@ type VM struct {
 	IsTemplate bool
 	TypeVM     string
 	Node       string
+	Uptime     int64
 }
 
 func VMList(client *pveSDK.Client) ([]VM, error) {
@@ -55,6 +56,11 @@ func VMList(client *pveSDK.Client) ([]VM, error) {
 			node = n
 		}
 
+		var uptime int64
+		if u, ok := vmInfo["uptime"].(float64); ok {
+			uptime = int64(u)
+		}
+
 		vms = append(vms, VM{
 			ID:         id,
 			Name:       name,
@@ -62,6 +68,7 @@ func VMList(client *pveSDK.Client) ([]VM, error) {
 			IsTemplate: isTemplate,
 			TypeVM:     typeVM,
 			Node:       node,
+			Uptime:     uptime,
 		})
 	}
 	return vms, nil

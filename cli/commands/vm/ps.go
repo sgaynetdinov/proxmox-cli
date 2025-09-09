@@ -25,7 +25,7 @@ func sortVmByStatus(filteredVMs []proxmox.VM) func(i, j int) bool {
 	}
 }
 
-var rowFormat = "%-8s %-30s %-10s %-5s %-10s\n"
+var rowFormat = "%-8s %-30s %-10s %-5s %-15s %-10s\n"
 
 var PsCmd = &cobra.Command{
 	Use:   "ps",
@@ -59,14 +59,20 @@ var PsCmd = &cobra.Command{
 			sort.SliceStable(filteredVMs, sortVmByStatus(filteredVMs))
 		}
 
-		fmt.Printf(rowFormat, "VM ID", "NAME", "STATUS", "TYPE", "NODE")
+		fmt.Printf(rowFormat, "VM ID", "NAME", "STATUS", "TYPE", "NODE", "UPTIME")
 
 		for _, vm := range filteredVMs {
 			name := vm.Name
 			if name == "" {
 				name = "<no name>"
 			}
-			fmt.Printf(rowFormat, strconv.Itoa(vm.ID), name, vm.Status, vm.TypeVM, vm.Node)
+
+			uptime := proxmox_utils.FormatSecondsHMS(vm.Uptime)
+			if vm.Status != proxmox_utils.VmStatusRunning {
+				uptime = "-"
+			}
+
+			fmt.Printf(rowFormat, strconv.Itoa(vm.ID), name, vm.Status, vm.TypeVM, vm.Node, uptime)
 		}
 	},
 }
