@@ -11,3 +11,9 @@ const (
 	VmStatusUnknown   = "unknown"
 	VmStatusPrelaunch = "prelaunch"
 )
+
+const (
+	ClusterStatusUnknown = "unknown"
+	ClusterStatusOnline  = "online"
+	ClusterStatusOffline = "offline"
+)

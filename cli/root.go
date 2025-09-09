@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	commands_cluster "proxmox-cli/cli/commands/cluster"
 	commands_vm "proxmox-cli/cli/commands/vm"
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
@@ -24,6 +25,10 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
+	// Cluster commands
+	rootCmd.AddCommand(commands_cluster.ClusterCmd)
+
+	// VM commands
 	rootCmd.AddCommand(commands_vm.PsCmd)
 	rootCmd.AddCommand(commands_vm.StartCmd)
 	rootCmd.AddCommand(commands_vm.StopCmd)
