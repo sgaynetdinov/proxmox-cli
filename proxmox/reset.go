@@ -17,7 +17,7 @@ func ResetVM(client *pveSDK.Client, vmID int) error {
 		return err
 	}
 
-	if vmr.GetVmType() == utils.VmTypeLxc {
+	if vmr.GetVmType() == utils.ResourceTypeLxc {
 		return fmt.Errorf("VM %d reset operation is not supported for LXC containers", vmID)
 	}
 

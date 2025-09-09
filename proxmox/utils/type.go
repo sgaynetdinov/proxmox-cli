@@ -1,8 +1,9 @@
 package utils
 
 const (
-	VmTypeQemu = "qemu"
-	VmTypeLxc  = "lxc"
+	ResourceTypeQemu = "qemu"
+	ResourceTypeLxc  = "lxc"
+	ResourceTypeNode = "node"
 )
 
 const (
