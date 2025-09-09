@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"proxmox-cli/cli/commands"
+	commands_vm "proxmox-cli/cli/commands/vm"
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
@@ -24,12 +24,12 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(commands.PsCmd)
-	rootCmd.AddCommand(commands.StartCmd)
-	rootCmd.AddCommand(commands.StopCmd)
-	rootCmd.AddCommand(commands.ShutdownCmd)
-	rootCmd.AddCommand(commands.ResetCmd)
-	rootCmd.AddCommand(commands.RebootCmd)
+	rootCmd.AddCommand(commands_vm.PsCmd)
+	rootCmd.AddCommand(commands_vm.StartCmd)
+	rootCmd.AddCommand(commands_vm.StopCmd)
+	rootCmd.AddCommand(commands_vm.ShutdownCmd)
+	rootCmd.AddCommand(commands_vm.ResetCmd)
+	rootCmd.AddCommand(commands_vm.RebootCmd)
 }
 
 func Execute() {
