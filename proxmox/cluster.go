@@ -4,7 +4,6 @@ import (
 	"context"
 
 	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
-	"proxmox-cli/proxmox/utils"
 )
 
 type ClusterNode struct {
@@ -36,15 +35,14 @@ func ClusterFromMap(info map[string]interface{}) ClusterNode {
 	}
 }
 
-
 func ClusterNodeList(client *pveSDK.Client) ([]ClusterNode, error) {
-	list, err := client.GetResourceList(context.Background(), utils.ResourceTypeNode)
+	nodeList, err := client.GetNodeList(context.Background())
 	if err != nil {
 		return nil, err
 	}
 
 	var nodes []ClusterNode
-	for _, item := range list {
+	for _, item := range nodeList["data"].([]interface{}) {
 		info := item.(map[string]interface{})
 		clusterNode := ClusterFromMap(info)
 		nodes = append(nodes, clusterNode)
