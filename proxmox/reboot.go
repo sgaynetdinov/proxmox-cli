@@ -17,8 +17,9 @@ func RebootVM(client *pveSDK.Client, vmID int) error {
 		return err
 	}
 
-	status := vmInfo["status"].(string)
-	if status != utils.VmStatusRunning {
+	vm := VMFromMap(vmInfo)
+
+	if vm.Status != utils.VmStatusRunning {
 		return fmt.Errorf("VM %d is not running", vmID)
 	}
 

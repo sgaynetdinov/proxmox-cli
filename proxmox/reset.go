@@ -17,12 +17,13 @@ func ResetVM(client *pveSDK.Client, vmID int) error {
 		return err
 	}
 
-	if vmr.GetVmType() == utils.ResourceTypeLxc {
+	vm := VMFromMap(vmInfo)
+
+	if vm.TypeVM == utils.ResourceTypeLxc {
 		return fmt.Errorf("VM %d reset operation is not supported for LXC containers", vmID)
 	}
 
-	status := vmInfo["status"].(string)
-	if status != utils.VmStatusRunning {
+	if vm.Status != utils.VmStatusRunning {
 		return fmt.Errorf("VM %d is not running", vmID)
 	}
 

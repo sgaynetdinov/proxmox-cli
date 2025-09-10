@@ -17,8 +17,9 @@ func StopVM(client *pveSDK.Client, vmID int) error {
 		return err
 	}
 
-	status := vmInfo["status"].(string)
-	if status == utils.VmStatusStopped {
+	vm := VMFromMap(vmInfo)
+
+	if vm.Status == utils.VmStatusStopped {
 		return fmt.Errorf("VM %d is already stopped", vmID)
 	}
 
