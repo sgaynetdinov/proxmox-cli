@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var RebootCmd = &cobra.Command{
+var rebootCmd = &cobra.Command{
 	Use:   "reboot <NODE_NAME>",
 	Short: "Reboot cluster node",
 	Long:  `Reboot cluster node by their names.`,
@@ -28,5 +28,5 @@ var RebootCmd = &cobra.Command{
 }
 
 func init() {
-	ClusterCmd.AddCommand(RebootCmd)
+	ClusterCmd.AddCommand(rebootCmd)
 }

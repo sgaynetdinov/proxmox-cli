@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var ShutdownCmd = &cobra.Command{
+var shutdownCmd = &cobra.Command{
 	Use:   "shutdown <NODE_NAME>",
 	Short: "Shutdown cluster node",
 	Long:  `Shutdown cluster node by their names.`,
@@ -28,5 +28,5 @@ var ShutdownCmd = &cobra.Command{
 }
 
 func init() {
-	ClusterCmd.AddCommand(ShutdownCmd)
+	ClusterCmd.AddCommand(shutdownCmd)
 }

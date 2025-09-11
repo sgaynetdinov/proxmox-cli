@@ -14,7 +14,7 @@ import (
 
 var rowFormat = "%-20s %-10s %-10s\n"
 
-var ListCmd = &cobra.Command{
+var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List cluster nodes",
 	Long:  `List all nodes in the Proxmox cluster`,
@@ -57,5 +57,5 @@ var ListCmd = &cobra.Command{
 }
 
 func init() {
-	ClusterCmd.AddCommand(ListCmd)
+	ClusterCmd.AddCommand(listCmd)
 }
