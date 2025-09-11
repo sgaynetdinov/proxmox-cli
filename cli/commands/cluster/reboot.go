@@ -10,10 +10,11 @@ import (
 )
 
 var rebootCmd = &cobra.Command{
-	Use:   "reboot <NODE_NAME>",
-	Short: "Reboot cluster node",
-	Long:  `Reboot cluster node by their names.`,
-	Args:  cobra.ExactArgs(1),
+	Use:     "reboot <NODE_NAME>",
+	Short:   "Reboot cluster node",
+	Long:    `Reboot cluster node by their names.`,
+	Aliases: []string{"restart"},
+	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		nodeName := args[0]
 		client := utils.GetClientFromContext(cmd)

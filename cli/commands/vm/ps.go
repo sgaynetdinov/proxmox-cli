@@ -28,9 +28,10 @@ func sortVmByStatus(filteredVMs []proxmox.VM) func(i, j int) bool {
 var rowFormat = "%-8s %-30s %-10s %-5s %-15s %-10s\n"
 
 var PsCmd = &cobra.Command{
-	Use:   "ps",
-	Short: "List virtual machines",
-	Long:  `List all virtual machines from Proxmox VE. By default shows only running VMs.`,
+	Use:     "ps",
+	Short:   "List virtual machines",
+	Long:    `List all virtual machines from Proxmox VE. By default shows only running VMs.`,
+	Aliases: []string{"list", "ls"},
 	Run: func(cmd *cobra.Command, args []string) {
 		client := utils.GetClientFromContext(cmd)
 

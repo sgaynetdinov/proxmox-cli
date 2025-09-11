@@ -15,9 +15,10 @@ import (
 var rowFormat = "%-20s %-10s %-10s\n"
 
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List cluster nodes",
-	Long:  `List all nodes in the Proxmox cluster`,
+	Use:     "list",
+	Short:   "List cluster nodes",
+	Long:    `List all nodes in the Proxmox cluster`,
+	Aliases: []string{"ls", "ps"},
 	Run: func(cmd *cobra.Command, args []string) {
 		client := utils.GetClientFromContext(cmd)
 

@@ -18,10 +18,11 @@ func shutdownMany(client *pveSDK.Client, vmIDs []int) {
 }
 
 var ShutdownCmd = &cobra.Command{
-	Use:   "shutdown <VM_ID> [VM_ID...]",
-	Short: "Gracefully shutdown one or more virtual machines",
-	Long:  `Gracefully shutdown one or more virtual machines by their IDs. This sends an ACPI shutdown signal to the guest OS.`,
-	Args:  cobra.MinimumNArgs(1),
+	Use:     "shutdown <VM_ID> [VM_ID...]",
+	Short:   "Gracefully shutdown one or more virtual machines",
+	Long:    `Gracefully shutdown one or more virtual machines by their IDs. This sends an ACPI shutdown signal to the guest OS.`,
+	Aliases: []string{"halt", "poweroff"},
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		vmIDs := utils.ParseVMIDs(args)
 		client := utils.GetClientFromContext(cmd)

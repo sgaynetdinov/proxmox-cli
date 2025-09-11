@@ -18,10 +18,11 @@ func rebootMany(client *pveSDK.Client, vmIDs []int) {
 }
 
 var RebootCmd = &cobra.Command{
-	Use:   "reboot <VM_ID> [VM_ID...]",
-	Short: "Reboot one or more virtual machines",
-	Long:  `Reboot one or more virtual machines by their IDs. Performs a graceful reboot via the guest OS (ACPI).`,
-	Args:  cobra.MinimumNArgs(1),
+	Use:     "reboot <VM_ID> [VM_ID...]",
+	Short:   "Reboot one or more virtual machines",
+	Long:    `Reboot one or more virtual machines by their IDs. Performs a graceful reboot via the guest OS (ACPI).`,
+	Aliases: []string{"restart"},
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		vmIDs := utils.ParseVMIDs(args)
 		client := utils.GetClientFromContext(cmd)
