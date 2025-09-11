@@ -51,8 +51,12 @@ func ClusterNodeList(client *pveSDK.Client) ([]ClusterNode, error) {
 	return nodes, nil
 }
 
-
 func ClusterRebootNode(client *pveSDK.Client, nodeName string) error {
 	_, err := client.RebootNode(context.Background(), nodeName)
+	return err
+}
+
+func ClusterShutdownNode(client *pveSDK.Client, nodeName string) error {
+	_, err := client.ShutdownNode(context.Background(), nodeName)
 	return err
 }
