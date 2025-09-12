@@ -10,14 +10,10 @@ import (
 )
 
 func RebootVM(client *pveSDK.Client, vmID int) error {
-	vmr := pveSDK.NewVmRef(pveSDK.GuestID(vmID))
-
-	vmInfo, err := client.GetVmInfo(context.Background(), vmr)
+	vm, vmr, err := getVmInfo(client, vmID)
 	if err != nil {
 		return err
 	}
-
-	vm := VMFromMap(vmInfo)
 
 	if vm.Status != utils.VmStatusRunning {
 		return fmt.Errorf("VM %d is not running", vmID)

@@ -1,5 +1,11 @@
 package proxmox
 
+import (
+	"context"
+
+	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
+)
+
 type VM struct {
 	ID         int
 	Name       string
@@ -55,4 +61,16 @@ func VMFromMap(vmInfo map[string]interface{}) VM {
 		Node:       node,
 		Uptime:     uptime,
 	}
+}
+
+func getVmInfo(client *pveSDK.Client, vmID int) (VM, *pveSDK.VmRef, error) {
+	vmr := pveSDK.NewVmRef(pveSDK.GuestID(vmID))
+
+	vmInfo, err := client.GetVmInfo(context.Background(), vmr)
+	if err != nil {
+		return VM{}, vmr, err
+	}
+
+	vm := VMFromMap(vmInfo)
+	return vm, vmr, nil
 }

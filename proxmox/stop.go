@@ -10,14 +10,10 @@ import (
 )
 
 func StopVM(client *pveSDK.Client, vmID int) error {
-	vmr := pveSDK.NewVmRef(pveSDK.GuestID(vmID))
-
-	vmInfo, err := client.GetVmInfo(context.Background(), vmr)
+	vm, vmr, err := getVmInfo(client, vmID)
 	if err != nil {
 		return err
 	}
-
-	vm := VMFromMap(vmInfo)
 
 	if vm.Status == utils.VmStatusStopped {
 		return fmt.Errorf("VM %d is already stopped", vmID)
