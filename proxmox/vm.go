@@ -2,6 +2,9 @@ package proxmox
 
 import (
 	"context"
+	"fmt"
+
+	"proxmox-cli/proxmox/utils"
 
 	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 )
@@ -73,4 +76,93 @@ func getVmInfo(client *pveSDK.Client, vmID int) (VM, *pveSDK.VmRef, error) {
 
 	vm := VMFromMap(vmInfo)
 	return vm, vmr, nil
+}
+
+func VMList(client *pveSDK.Client) ([]VM, error) {
+	vmList, err := client.GetVmList(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	var vms []VM
+	for _, vm := range vmList["data"].([]interface{}) {
+		vmInfo := vm.(map[string]interface{})
+		vm := VMFromMap(vmInfo)
+		vms = append(vms, vm)
+	}
+	return vms, nil
+}
+
+func StartVM(client *pveSDK.Client, vmID int) error {
+	vm, vmr, err := getVmInfo(client, vmID)
+	if err != nil {
+		return err
+	}
+
+	if vm.Status == utils.VmStatusRunning {
+		return fmt.Errorf("VM %d is already running", vmID)
+	}
+
+	_, err = client.StartVm(context.Background(), vmr)
+	return err
+}
+
+func StopVM(client *pveSDK.Client, vmID int) error {
+	vm, vmr, err := getVmInfo(client, vmID)
+	if err != nil {
+		return err
+	}
+
+	if vm.Status == utils.VmStatusStopped {
+		return fmt.Errorf("VM %d is already stopped", vmID)
+	}
+
+	err = vmr.Stop(context.Background(), client)
+	return err
+}
+
+func ShutdownVM(client *pveSDK.Client, vmID int) error {
+	vm, vmr, err := getVmInfo(client, vmID)
+	if err != nil {
+		return err
+	}
+
+	if vm.Status == utils.VmStatusStopped {
+		return fmt.Errorf("VM %d is already stopped", vmID)
+	}
+
+	_, err = client.ShutdownVm(context.Background(), vmr)
+	return err
+}
+
+func ResetVM(client *pveSDK.Client, vmID int) error {
+	vm, vmr, err := getVmInfo(client, vmID)
+	if err != nil {
+		return err
+	}
+
+	if vm.TypeVM == utils.ResourceTypeLxc {
+		return fmt.Errorf("VM %d reset operation is not supported for LXC containers", vmID)
+	}
+
+	if vm.Status != utils.VmStatusRunning {
+		return fmt.Errorf("VM %d is not running", vmID)
+	}
+
+	_, err = client.ResetVm(context.Background(), vmr)
+	return err
+}
+
+func RebootVM(client *pveSDK.Client, vmID int) error {
+	vm, vmr, err := getVmInfo(client, vmID)
+	if err != nil {
+		return err
+	}
+
+	if vm.Status != utils.VmStatusRunning {
+		return fmt.Errorf("VM %d is not running", vmID)
+	}
+
+	_, err = client.RebootVm(context.Background(), vmr)
+	return err
 }
