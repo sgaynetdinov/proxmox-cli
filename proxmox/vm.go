@@ -66,7 +66,7 @@ func VMFromMap(vmInfo map[string]interface{}) VM {
 	}
 }
 
-func getVmInfo(client *pveSDK.Client, vmID int) (VM, *pveSDK.VmRef, error) {
+func getVmInfo(client *ProxmoxClient, vmID int) (VM, *pveSDK.VmRef, error) {
 	vmr := pveSDK.NewVmRef(pveSDK.GuestID(vmID))
 
 	vmInfo, err := client.GetVmInfo(context.Background(), vmr)
@@ -78,7 +78,7 @@ func getVmInfo(client *pveSDK.Client, vmID int) (VM, *pveSDK.VmRef, error) {
 	return vm, vmr, nil
 }
 
-func VMList(client *pveSDK.Client) ([]VM, error) {
+func VMList(client *ProxmoxClient) ([]VM, error) {
 	vmList, err := client.GetVmList(context.Background())
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func VMList(client *pveSDK.Client) ([]VM, error) {
 	return vms, nil
 }
 
-func StartVM(client *pveSDK.Client, vmID int) error {
+func StartVM(client *ProxmoxClient, vmID int) error {
 	vm, vmr, err := getVmInfo(client, vmID)
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func StartVM(client *pveSDK.Client, vmID int) error {
 	return err
 }
 
-func StopVM(client *pveSDK.Client, vmID int) error {
+func StopVM(client *ProxmoxClient, vmID int) error {
 	vm, vmr, err := getVmInfo(client, vmID)
 	if err != nil {
 		return err
@@ -121,7 +121,7 @@ func StopVM(client *pveSDK.Client, vmID int) error {
 	return err
 }
 
-func ShutdownVM(client *pveSDK.Client, vmID int) error {
+func ShutdownVM(client *ProxmoxClient, vmID int) error {
 	vm, vmr, err := getVmInfo(client, vmID)
 	if err != nil {
 		return err
@@ -135,7 +135,7 @@ func ShutdownVM(client *pveSDK.Client, vmID int) error {
 	return err
 }
 
-func ResetVM(client *pveSDK.Client, vmID int) error {
+func ResetVM(client *ProxmoxClient, vmID int) error {
 	vm, vmr, err := getVmInfo(client, vmID)
 	if err != nil {
 		return err
@@ -153,7 +153,7 @@ func ResetVM(client *pveSDK.Client, vmID int) error {
 	return err
 }
 
-func RebootVM(client *pveSDK.Client, vmID int) error {
+func RebootVM(client *ProxmoxClient, vmID int) error {
 	vm, vmr, err := getVmInfo(client, vmID)
 	if err != nil {
 		return err

@@ -10,7 +10,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func createClient() (*pveSDK.Client, error) {
+type ProxmoxClient = pveSDK.Client
+
+func createClient() (*ProxmoxClient, error) {
 	apiURL := os.Getenv("PM_API_URL")
 	if apiURL == "" {
 		return nil, fmt.Errorf("PM_API_URL environment variable must be set")
@@ -19,7 +21,7 @@ func createClient() (*pveSDK.Client, error) {
 	return pveSDK.NewClient(apiURL, nil, "", &tls.Config{InsecureSkipVerify: true}, "", 30)
 }
 
-func loginClient(client *pveSDK.Client, ctx context.Context) error {
+func loginClient(client *ProxmoxClient, ctx context.Context) error {
 	user := os.Getenv("PM_USER")
 	pass := os.Getenv("PM_PASS")
 
@@ -30,7 +32,7 @@ func loginClient(client *pveSDK.Client, ctx context.Context) error {
 	return client.Login(ctx, user, pass, "")
 }
 
-func Login(ctx context.Context) *pveSDK.Client {
+func Login(ctx context.Context) *ProxmoxClient {
 	godotenv.Load()
 
 	client, err := createClient()

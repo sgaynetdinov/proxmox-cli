@@ -2,8 +2,6 @@ package proxmox
 
 import (
 	"context"
-
-	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 )
 
 type ClusterNode struct {
@@ -35,7 +33,7 @@ func ClusterFromMap(info map[string]interface{}) ClusterNode {
 	}
 }
 
-func ClusterNodeList(client *pveSDK.Client) ([]ClusterNode, error) {
+func ClusterNodeList(client *ProxmoxClient) ([]ClusterNode, error) {
 	nodeList, err := client.GetNodeList(context.Background())
 	if err != nil {
 		return nil, err
@@ -51,12 +49,12 @@ func ClusterNodeList(client *pveSDK.Client) ([]ClusterNode, error) {
 	return nodes, nil
 }
 
-func ClusterRebootNode(client *pveSDK.Client, nodeName string) error {
+func ClusterRebootNode(client *ProxmoxClient, nodeName string) error {
 	_, err := client.RebootNode(context.Background(), nodeName)
 	return err
 }
 
-func ClusterShutdownNode(client *pveSDK.Client, nodeName string) error {
+func ClusterShutdownNode(client *ProxmoxClient, nodeName string) error {
 	_, err := client.ShutdownNode(context.Background(), nodeName)
 	return err
 }

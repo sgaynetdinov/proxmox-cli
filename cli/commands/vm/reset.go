@@ -6,11 +6,10 @@ import (
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
-	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 	"github.com/spf13/cobra"
 )
 
-func resetMany(client *pveSDK.Client, vmIDs []int) {
+func resetMany(client *proxmox.ProxmoxClient, vmIDs []int) {
 	utils.ExecuteVMOperations(vmIDs,
 		func(vmID int) error { return proxmox.ResetVM(client, vmID) },
 		func(vmID int) string { return fmt.Sprintf("VM %d reset initiated successfully", vmID) },

@@ -6,11 +6,10 @@ import (
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
-	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 	"github.com/spf13/cobra"
 )
 
-func shutdownMany(client *pveSDK.Client, vmIDs []int) {
+func shutdownMany(client *proxmox.ProxmoxClient, vmIDs []int) {
 	utils.ExecuteVMOperations(vmIDs,
 		func(vmID int) error { return proxmox.ShutdownVM(client, vmID) },
 		func(vmID int) string { return fmt.Sprintf("VM %d shutdown initiated successfully", vmID) },

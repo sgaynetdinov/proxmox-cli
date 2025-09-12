@@ -6,11 +6,10 @@ import (
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
 
-	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 	"github.com/spf13/cobra"
 )
 
-func rebootMany(client *pveSDK.Client, vmIDs []int) {
+func rebootMany(client *proxmox.ProxmoxClient, vmIDs []int) {
 	utils.ExecuteVMOperations(vmIDs,
 		func(vmID int) error { return proxmox.RebootVM(client, vmID) },
 		func(vmID int) string { return fmt.Sprintf("VM %d reboot initiated successfully", vmID) },
