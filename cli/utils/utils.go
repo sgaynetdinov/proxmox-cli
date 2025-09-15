@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 func ParseVMIDs(args []string) []int {
@@ -28,4 +30,20 @@ func ExecuteVMOperations(vmIDs []int, operation func(int) error, successMessage 
 			fmt.Printf("%s\n", successMessage(vmID))
 		}
 	}
+}
+
+func GetCredentialsFromEnv() (string, string, string, error) {
+	godotenv.Load()
+
+	apiURL := os.Getenv("PM_API_URL")
+	if apiURL == "" {
+		return "", "", "", fmt.Errorf("PM_API_URL environment variable must be set")
+	}
+
+	username := os.Getenv("PM_USER")
+	password := os.Getenv("PM_PASS")
+	if username == "" || password == "" {
+		return "", "", "", fmt.Errorf("PM_USER and PM_PASS environment variables must be set")
+	}
+	return apiURL, username, password, nil
 }

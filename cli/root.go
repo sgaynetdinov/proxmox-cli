@@ -18,7 +18,13 @@ var rootCmd = &cobra.Command{
 	Short: "A CLI tool for managing Proxmox VE",
 	Long:  `A command line interface for interacting with Proxmox VE API`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		client := proxmox.Login(cmd.Context())
+		apiURL, username, password, err := utils.GetCredentialsFromEnv()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error get credentials: %v\n", err)
+			os.Exit(1)
+		}
+
+		client := proxmox.Login(cmd.Context(), apiURL, username, password)
 		ctx := context.WithValue(cmd.Context(), utils.ClientKey, client)
 		cmd.SetContext(ctx)
 	},
