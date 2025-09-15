@@ -24,7 +24,7 @@ var rootCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		client := proxmox.Login(cmd.Context(), apiURL, username, password)
+		client := proxmox.NewClient(cmd.Context(), apiURL, username, password)
 		ctx := context.WithValue(cmd.Context(), utils.ClientKey, client)
 		cmd.SetContext(ctx)
 	},

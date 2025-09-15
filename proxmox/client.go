@@ -15,7 +15,7 @@ func createClient(apiURL string) (*ProxmoxClient, error) {
 	return pveSDK.NewClient(apiURL, nil, "", &tls.Config{InsecureSkipVerify: true}, "", 30)
 }
 
-func Login(ctx context.Context, apiURL, username, password string) *ProxmoxClient {
+func NewClient(ctx context.Context, apiURL, username, password string) *ProxmoxClient {
 	client, err := createClient(apiURL)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating client: %v\n", err)
