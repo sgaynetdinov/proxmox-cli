@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"os"
 
 	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 )
@@ -15,18 +14,15 @@ func createClient(apiURL string) (*ProxmoxClient, error) {
 	return pveSDK.NewClient(apiURL, nil, "", &tls.Config{InsecureSkipVerify: true}, "", 30)
 }
 
-func NewClient(ctx context.Context, apiURL, username, password string) *ProxmoxClient {
+func NewClient(ctx context.Context, apiURL, username, password string) (*ProxmoxClient, error) {
 	client, err := createClient(apiURL)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating client: %v\n", err)
-		os.Exit(1)
+		return nil, fmt.Errorf("creating client: %w", err)
 	}
 
-	err = client.Login(ctx, username, password, "")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error logging in: %v\n", err)
-		os.Exit(1)
+	if err := client.Login(ctx, username, password, ""); err != nil {
+		return nil, fmt.Errorf("logging in: %w", err)
 	}
 
-	return client
+	return client, nil
 }

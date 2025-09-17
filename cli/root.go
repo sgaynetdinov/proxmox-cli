@@ -20,11 +20,15 @@ var rootCmd = &cobra.Command{
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		apiURL, username, password, err := utils.GetCredentialsFromEnv()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error get credentials: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error getting credentials: %v\n", err)
 			os.Exit(1)
 		}
 
-		client := proxmox.NewClient(cmd.Context(), apiURL, username, password)
+		client, err := proxmox.NewClient(cmd.Context(), apiURL, username, password)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error creating Proxmox client: %v\n", err)
+			os.Exit(1)
+		}
 		ctx := context.WithValue(cmd.Context(), utils.ClientKey, client)
 		cmd.SetContext(ctx)
 	},
