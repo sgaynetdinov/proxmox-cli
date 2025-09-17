@@ -22,7 +22,7 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client := utils.GetClientFromContext(cmd)
 
-		nodes, err := proxmox.ClusterNodeList(client)
+		nodes, err := proxmox.ClusterNodeList(cmd.Context(), client)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error getting cluster nodes: %v\n", err)
 			os.Exit(1)

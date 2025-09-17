@@ -66,10 +66,10 @@ func VMFromMap(vmInfo map[string]interface{}) VM {
 	}
 }
 
-func getVmInfo(client *ProxmoxClient, vmID int) (VM, *pveSDK.VmRef, error) {
+func getVmInfo(ctx context.Context, client *ProxmoxClient, vmID int) (VM, *pveSDK.VmRef, error) {
 	vmr := pveSDK.NewVmRef(pveSDK.GuestID(vmID))
 
-	vmInfo, err := client.GetVmInfo(context.Background(), vmr)
+	vmInfo, err := client.GetVmInfo(ctx, vmr)
 	if err != nil {
 		return VM{}, vmr, err
 	}
@@ -78,8 +78,8 @@ func getVmInfo(client *ProxmoxClient, vmID int) (VM, *pveSDK.VmRef, error) {
 	return vm, vmr, nil
 }
 
-func VMList(client *ProxmoxClient) ([]VM, error) {
-	vmList, err := client.GetVmList(context.Background())
+func VMList(ctx context.Context, client *ProxmoxClient) ([]VM, error) {
+	vmList, err := client.GetVmList(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -93,8 +93,8 @@ func VMList(client *ProxmoxClient) ([]VM, error) {
 	return vms, nil
 }
 
-func StartVM(client *ProxmoxClient, vmID int) error {
-	vm, vmr, err := getVmInfo(client, vmID)
+func StartVM(ctx context.Context, client *ProxmoxClient, vmID int) error {
+	vm, vmr, err := getVmInfo(ctx, client, vmID)
 	if err != nil {
 		return err
 	}
@@ -103,12 +103,12 @@ func StartVM(client *ProxmoxClient, vmID int) error {
 		return fmt.Errorf("VM %d is already running", vmID)
 	}
 
-	_, err = client.StartVm(context.Background(), vmr)
+	_, err = client.StartVm(ctx, vmr)
 	return err
 }
 
-func StopVM(client *ProxmoxClient, vmID int) error {
-	vm, vmr, err := getVmInfo(client, vmID)
+func StopVM(ctx context.Context, client *ProxmoxClient, vmID int) error {
+	vm, vmr, err := getVmInfo(ctx, client, vmID)
 	if err != nil {
 		return err
 	}
@@ -117,12 +117,12 @@ func StopVM(client *ProxmoxClient, vmID int) error {
 		return fmt.Errorf("VM %d is already stopped", vmID)
 	}
 
-	err = vmr.Stop(context.Background(), client)
+	err = vmr.Stop(ctx, client)
 	return err
 }
 
-func ShutdownVM(client *ProxmoxClient, vmID int) error {
-	vm, vmr, err := getVmInfo(client, vmID)
+func ShutdownVM(ctx context.Context, client *ProxmoxClient, vmID int) error {
+	vm, vmr, err := getVmInfo(ctx, client, vmID)
 	if err != nil {
 		return err
 	}
@@ -131,12 +131,12 @@ func ShutdownVM(client *ProxmoxClient, vmID int) error {
 		return fmt.Errorf("VM %d is already stopped", vmID)
 	}
 
-	_, err = client.ShutdownVm(context.Background(), vmr)
+	_, err = client.ShutdownVm(ctx, vmr)
 	return err
 }
 
-func ResetVM(client *ProxmoxClient, vmID int) error {
-	vm, vmr, err := getVmInfo(client, vmID)
+func ResetVM(ctx context.Context, client *ProxmoxClient, vmID int) error {
+	vm, vmr, err := getVmInfo(ctx, client, vmID)
 	if err != nil {
 		return err
 	}
@@ -149,12 +149,12 @@ func ResetVM(client *ProxmoxClient, vmID int) error {
 		return fmt.Errorf("VM %d is not running", vmID)
 	}
 
-	_, err = client.ResetVm(context.Background(), vmr)
+	_, err = client.ResetVm(ctx, vmr)
 	return err
 }
 
-func RebootVM(client *ProxmoxClient, vmID int) error {
-	vm, vmr, err := getVmInfo(client, vmID)
+func RebootVM(ctx context.Context, client *ProxmoxClient, vmID int) error {
+	vm, vmr, err := getVmInfo(ctx, client, vmID)
 	if err != nil {
 		return err
 	}
@@ -163,6 +163,6 @@ func RebootVM(client *ProxmoxClient, vmID int) error {
 		return fmt.Errorf("VM %d is not running", vmID)
 	}
 
-	_, err = client.RebootVm(context.Background(), vmr)
+	_, err = client.RebootVm(ctx, vmr)
 	return err
 }

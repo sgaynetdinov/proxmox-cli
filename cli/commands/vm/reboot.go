@@ -1,6 +1,7 @@
 package vm
 
 import (
+	"context"
 	"fmt"
 
 	"proxmox-cli/cli/utils"
@@ -9,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func rebootMany(client *proxmox.ProxmoxClient, vmIDs []int) {
+func rebootMany(ctx context.Context, client *proxmox.ProxmoxClient, vmIDs []int) {
 	utils.ExecuteVMOperations(vmIDs,
-		func(vmID int) error { return proxmox.RebootVM(client, vmID) },
+		func(vmID int) error { return proxmox.RebootVM(ctx, client, vmID) },
 		func(vmID int) string { return fmt.Sprintf("VM %d reboot initiated successfully", vmID) },
 	)
 }
@@ -28,9 +29,9 @@ var RebootCmd = &cobra.Command{
 		force, _ := cmd.Flags().GetBool("force")
 
 		if force {
-			resetMany(client, vmIDs)
+			resetMany(cmd.Context(), client, vmIDs)
 		} else {
-			rebootMany(client, vmIDs)
+			rebootMany(cmd.Context(), client, vmIDs)
 		}
 	},
 }

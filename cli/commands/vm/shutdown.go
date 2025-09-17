@@ -1,6 +1,7 @@
 package vm
 
 import (
+	"context"
 	"fmt"
 
 	"proxmox-cli/cli/utils"
@@ -9,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func shutdownMany(client *proxmox.ProxmoxClient, vmIDs []int) {
+func shutdownMany(ctx context.Context, client *proxmox.ProxmoxClient, vmIDs []int) {
 	utils.ExecuteVMOperations(vmIDs,
-		func(vmID int) error { return proxmox.ShutdownVM(client, vmID) },
+		func(vmID int) error { return proxmox.ShutdownVM(ctx, client, vmID) },
 		func(vmID int) string { return fmt.Sprintf("VM %d shutdown initiated successfully", vmID) },
 	)
 }
@@ -28,9 +29,9 @@ var ShutdownCmd = &cobra.Command{
 		force, _ := cmd.Flags().GetBool("force")
 
 		if force {
-			stopMany(client, vmIDs)
+			stopMany(cmd.Context(), client, vmIDs)
 		} else {
-			shutdownMany(client, vmIDs)
+			shutdownMany(cmd.Context(), client, vmIDs)
 		}
 	},
 }

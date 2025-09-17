@@ -1,6 +1,7 @@
 package vm
 
 import (
+	"context"
 	"fmt"
 
 	"proxmox-cli/cli/utils"
@@ -9,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func stopMany(client *proxmox.ProxmoxClient, vmIDs []int) {
+func stopMany(ctx context.Context, client *proxmox.ProxmoxClient, vmIDs []int) {
 	utils.ExecuteVMOperations(vmIDs,
-		func(vmID int) error { return proxmox.StopVM(client, vmID) },
+		func(vmID int) error { return proxmox.StopVM(ctx, client, vmID) },
 		func(vmID int) string { return fmt.Sprintf("VM %d stopped successfully", vmID) },
 	)
 }
@@ -25,6 +26,6 @@ var StopCmd = &cobra.Command{
 		vmIDs := utils.ParseVMIDs(args)
 		client := utils.GetClientFromContext(cmd)
 
-		stopMany(client, vmIDs)
+		stopMany(cmd.Context(), client, vmIDs)
 	},
 }

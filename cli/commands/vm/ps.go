@@ -35,7 +35,7 @@ var PsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client := utils.GetClientFromContext(cmd)
 
-		vms, err := proxmox.VMList(client)
+		vms, err := proxmox.VMList(cmd.Context(), client)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error getting VM list: %v\n", err)
 			os.Exit(1)

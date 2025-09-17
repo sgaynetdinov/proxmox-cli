@@ -21,7 +21,7 @@ var StartCmd = &cobra.Command{
 
 		utils.ExecuteVMOperations(vmIDs,
 			func(vmID int) error {
-				return proxmox.StartVM(client, vmID)
+				return proxmox.StartVM(cmd.Context(), client, vmID)
 			},
 			func(vmID int) string {
 				return fmt.Sprintf("VM %d started successfully", vmID)

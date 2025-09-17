@@ -33,8 +33,8 @@ func ClusterFromMap(info map[string]interface{}) ClusterNode {
 	}
 }
 
-func ClusterNodeList(client *ProxmoxClient) ([]ClusterNode, error) {
-	nodeList, err := client.GetNodeList(context.Background())
+func ClusterNodeList(ctx context.Context, client *ProxmoxClient) ([]ClusterNode, error) {
+	nodeList, err := client.GetNodeList(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -49,12 +49,12 @@ func ClusterNodeList(client *ProxmoxClient) ([]ClusterNode, error) {
 	return nodes, nil
 }
 
-func ClusterRebootNode(client *ProxmoxClient, nodeName string) error {
-	_, err := client.RebootNode(context.Background(), nodeName)
+func ClusterRebootNode(ctx context.Context, client *ProxmoxClient, nodeName string) error {
+	_, err := client.RebootNode(ctx, nodeName)
 	return err
 }
 
-func ClusterShutdownNode(client *ProxmoxClient, nodeName string) error {
-	_, err := client.ShutdownNode(context.Background(), nodeName)
+func ClusterShutdownNode(ctx context.Context, client *ProxmoxClient, nodeName string) error {
+	_, err := client.ShutdownNode(ctx, nodeName)
 	return err
 }

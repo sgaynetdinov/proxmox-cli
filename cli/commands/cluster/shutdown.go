@@ -2,6 +2,7 @@ package cluster
 
 import (
 	"fmt"
+	"os"
 
 	"proxmox-cli/cli/utils"
 	"proxmox-cli/proxmox"
@@ -19,12 +20,12 @@ var shutdownCmd = &cobra.Command{
 		nodeName := args[0]
 		client := utils.GetClientFromContext(cmd)
 
-		err := proxmox.ClusterShutdownNode(client, nodeName)
+		err := proxmox.ClusterShutdownNode(cmd.Context(), client, nodeName)
 		if err != nil {
-			fmt.Printf("Error shutdown node %s: %v\n", nodeName, err)
-		} else {
-			fmt.Printf("Node %s shutdown initiated successfully\n", nodeName)
+			fmt.Fprintf(os.Stderr, "Error shutdown node %s: %v\n", nodeName, err)
+			return
 		}
+		fmt.Printf("Node %s shutdown initiated successfully\n", nodeName)
 	},
 }
 

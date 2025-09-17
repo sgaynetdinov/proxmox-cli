@@ -1,6 +1,7 @@
 package vm
 
 import (
+	"context"
 	"fmt"
 
 	"proxmox-cli/cli/utils"
@@ -9,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func resetMany(client *proxmox.ProxmoxClient, vmIDs []int) {
+func resetMany(ctx context.Context, client *proxmox.ProxmoxClient, vmIDs []int) {
 	utils.ExecuteVMOperations(vmIDs,
-		func(vmID int) error { return proxmox.ResetVM(client, vmID) },
+		func(vmID int) error { return proxmox.ResetVM(ctx, client, vmID) },
 		func(vmID int) string { return fmt.Sprintf("VM %d reset initiated successfully", vmID) },
 	)
 }
@@ -25,6 +26,6 @@ var ResetCmd = &cobra.Command{
 		vmIDs := utils.ParseVMIDs(args)
 		client := utils.GetClientFromContext(cmd)
 
-		resetMany(client, vmIDs)
+		resetMany(cmd.Context(), client, vmIDs)
 	},
 }
