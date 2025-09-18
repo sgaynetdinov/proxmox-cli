@@ -3,8 +3,8 @@ package vm
 import (
 	"fmt"
 
-	"proxmox-cli/cli/utils"
-	"proxmox-cli/proxmox"
+	"proxmox-cli/internal/cli/utils"
+	"proxmox-cli/internal/proxmox"
 
 	"github.com/spf13/cobra"
 )

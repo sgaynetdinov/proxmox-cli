@@ -6,9 +6,9 @@ import (
 	"sort"
 	"strconv"
 
-	"proxmox-cli/cli/utils"
-	"proxmox-cli/proxmox"
-	proxmox_utils "proxmox-cli/proxmox/utils"
+	"proxmox-cli/internal/cli/utils"
+	"proxmox-cli/internal/proxmox"
+	proxmox_utils "proxmox-cli/internal/proxmox/utils"
 
 	"github.com/spf13/cobra"
 )

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"proxmox-cli/cli"
+	"proxmox-cli/internal/cli"
 )
 
 func main() {

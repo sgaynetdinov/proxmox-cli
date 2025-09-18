@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"proxmox-cli/proxmox"
+	"proxmox-cli/internal/proxmox"
 
 	"github.com/spf13/cobra"
 )

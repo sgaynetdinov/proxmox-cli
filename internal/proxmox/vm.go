@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"proxmox-cli/proxmox/utils"
+	"proxmox-cli/internal/proxmox/utils"
 
 	pveSDK "github.com/Telmate/proxmox-api-go/proxmox"
 )

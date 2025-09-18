@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	commands_cluster "proxmox-cli/cli/commands/cluster"
-	commands_vm "proxmox-cli/cli/commands/vm"
-	"proxmox-cli/cli/utils"
-	"proxmox-cli/proxmox"
+	commands_cluster "proxmox-cli/internal/cli/commands/cluster"
+	commands_vm "proxmox-cli/internal/cli/commands/vm"
+	"proxmox-cli/internal/cli/utils"
+	"proxmox-cli/internal/proxmox"
 
 	"github.com/spf13/cobra"
 )
