@@ -5,8 +5,8 @@ A lightweight command-line tool to interact with Proxmox VE: list and control vi
 ## Install
 
 - Build from source:
-  - `go build -o proxmox-cli .`
-  - `./proxmox-cli --help`
+  - `go build -o proxmox-cli ./cmd/proxmox-cli`
+  - `go run ./cmd/proxmox-cli --help`
 
 Note: Package managers and release binaries may be added later.
 
@@ -49,6 +49,6 @@ Run `proxmox-cli --help` or any subcommand with `--help` for details.
 
 ## Development
 
-- Run: `make run`
 - Tests: `make test`
+- Format: `make fmt`
 - Tidy/vendor deps: `make tidy`
