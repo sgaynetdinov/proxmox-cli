@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"proxmox-cli/internal/cli/utils"
+	clicontext "proxmox-cli/internal/cli/context"
 	"proxmox-cli/internal/proxmox"
 
 	"github.com/spf13/cobra"
@@ -18,7 +18,7 @@ var shutdownCmd = &cobra.Command{
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		nodeName := args[0]
-		client := utils.GetClientFromContext(cmd)
+		client := clicontext.GetClientFromContext(cmd)
 
 		err := proxmox.ClusterShutdownNode(cmd.Context(), client, nodeName)
 		if err != nil {

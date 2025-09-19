@@ -5,7 +5,7 @@ import (
 	"os"
 	"sort"
 
-	"proxmox-cli/internal/cli/utils"
+	clicontext "proxmox-cli/internal/cli/context"
 	"proxmox-cli/internal/proxmox"
 	proxmox_utils "proxmox-cli/internal/proxmox/utils"
 
@@ -20,7 +20,7 @@ var listCmd = &cobra.Command{
 	Long:    `List all nodes in the Proxmox cluster`,
 	Aliases: []string{"ls", "ps"},
 	Run: func(cmd *cobra.Command, args []string) {
-		client := utils.GetClientFromContext(cmd)
+		client := clicontext.GetClientFromContext(cmd)
 
 		nodes, err := proxmox.ClusterNodeList(cmd.Context(), client)
 		if err != nil {

@@ -7,6 +7,7 @@ import (
 
 	commands_cluster "proxmox-cli/internal/cli/commands/cluster"
 	commands_vm "proxmox-cli/internal/cli/commands/vm"
+	clicontext "proxmox-cli/internal/cli/context"
 	"proxmox-cli/internal/cli/utils"
 	"proxmox-cli/internal/proxmox"
 
@@ -29,7 +30,7 @@ var rootCmd = &cobra.Command{
 			fmt.Fprintf(os.Stderr, "Error creating Proxmox client: %v\n", err)
 			os.Exit(1)
 		}
-		ctx := context.WithValue(cmd.Context(), utils.ClientKey, client)
+		ctx := context.WithValue(cmd.Context(), clicontext.ClientKey, client)
 		cmd.SetContext(ctx)
 	},
 }

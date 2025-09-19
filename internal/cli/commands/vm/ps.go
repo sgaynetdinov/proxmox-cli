@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strconv"
 
-	"proxmox-cli/internal/cli/utils"
+	clicontext "proxmox-cli/internal/cli/context"
 	"proxmox-cli/internal/proxmox"
 	proxmox_utils "proxmox-cli/internal/proxmox/utils"
 
@@ -33,7 +33,7 @@ var PsCmd = &cobra.Command{
 	Long:    `List all virtual machines from Proxmox VE. By default shows only running VMs.`,
 	Aliases: []string{"list", "ls"},
 	Run: func(cmd *cobra.Command, args []string) {
-		client := utils.GetClientFromContext(cmd)
+		client := clicontext.GetClientFromContext(cmd)
 
 		vms, err := proxmox.VMList(cmd.Context(), client)
 		if err != nil {

@@ -3,6 +3,7 @@ package vm
 import (
 	"fmt"
 
+	clicontext "proxmox-cli/internal/cli/context"
 	"proxmox-cli/internal/cli/utils"
 	"proxmox-cli/internal/proxmox"
 
@@ -17,7 +18,7 @@ var StartCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		vmIDs := utils.ParseVMIDs(args)
-		client := utils.GetClientFromContext(cmd)
+		client := clicontext.GetClientFromContext(cmd)
 
 		utils.ExecuteVMOperations(vmIDs,
 			func(vmID int) error {
