@@ -6,7 +6,6 @@ toolchain go1.24.1
 
 require (
 	github.com/Telmate/proxmox-api-go v0.0.0-20250824214849-af879153effb
-	github.com/joho/godotenv v1.5.1
 	github.com/spf13/cobra v1.9.1
 )
 
