@@ -14,6 +14,40 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const rootUsageTemplate = `{{header "USAGE"}}{{if .Runnable}}
+  {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
+  {{.CommandPath}} <command> <subcommand> [flags]{{end}}{{if gt (len .Aliases) 0}}
+
+{{header "ALIASES"}}
+  {{.NameAndAliases}}{{end}}{{if .HasExample}}
+
+{{header "EXAMPLES"}}
+{{.Example}}{{end}}{{if .HasAvailableSubCommands}}{{$cmds := .Commands}}{{if eq (len .Groups) 0}}
+
+{{header "AVAILABLE COMMANDS"}}{{range $cmds}}{{if (and .IsAvailableCommand (ne .Name "completion") (ne .Name "help"))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{if eq .CommandPath "proxmox-cli"}}
+
+{{header "ADDITIONAL COMMANDS"}}{{range $cmds}}{{if (eq .Name "completion")}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{else}}{{range $group := .Groups}}
+
+{{header .Title}}{{range $cmds}}{{if (and (eq .GroupID $group.ID) .IsAvailableCommand (ne .Name "help"))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{if not .AllChildCommandsHaveGroup}}
+
+{{header "ADDITIONAL COMMANDS"}}{{range $cmds}}{{if (and (eq .GroupID "") .IsAvailableCommand (ne .Name "help"))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{end}}{{end}}{{if .HasAvailableLocalFlags}}
+
+{{header "FLAGS"}}
+{{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasAvailableInheritedFlags}}
+
+{{header "GLOBAL FLAGS"}}
+{{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasHelpSubCommands}}
+
+{{header "ADDITIONAL HELP TOPICS"}}{{range .Commands}}{{if .IsAdditionalHelpTopicCommand}}
+  {{rpad .CommandPath .CommandPathPadding}} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
+
+Use "{{.CommandPath}} <command> <subcommand> --help" for more information about a command.{{end}}
+`
+
 var rootCmd = &cobra.Command{
 	Use:   "proxmox-cli",
 	Short: "A CLI tool for managing Proxmox VE",
@@ -36,6 +70,11 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
+	cobra.AddTemplateFunc("header", func(s string) string {
+		return "\x1b[1m" + s + "\x1b[0m"
+	})
+	rootCmd.SetUsageTemplate(rootUsageTemplate)
+
 	// Cluster commands
 	rootCmd.AddCommand(commands_cluster.ClusterCmd)
 
