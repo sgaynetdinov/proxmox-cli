@@ -14,8 +14,6 @@ var VmCmd = &cobra.Command{
 func init() {
 	VmCmd.AddCommand(PsCmd)
 	VmCmd.AddCommand(StartCmd)
-	VmCmd.AddCommand(StopCmd)
 	VmCmd.AddCommand(ShutdownCmd)
-	VmCmd.AddCommand(ResetCmd)
 	VmCmd.AddCommand(RebootCmd)
 }
