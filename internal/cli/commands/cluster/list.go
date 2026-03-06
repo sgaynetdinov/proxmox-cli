@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rowFormat = "%-20s %-10s %10s\n"
+var rowFormat = "%-20s %-10s %13s\n"
 
 var listCmd = &cobra.Command{
 	Use:     "list",

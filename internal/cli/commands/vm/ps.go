@@ -25,7 +25,7 @@ func sortVmByStatus(filteredVMs []proxmox.VM) func(i, j int) bool {
 	}
 }
 
-var rowFormat = "%-8s %-30s %-10s %-5s %-15s %10s\n"
+var rowFormat = "%-8s %-30s %-10s %-5s %-15s %13s\n"
 
 var PsCmd = &cobra.Command{
 	Use:     "ps",
