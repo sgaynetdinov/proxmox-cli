@@ -2,18 +2,29 @@ package utils
 
 import "fmt"
 
-// FormatSecondsHMS converts a duration in seconds to HH:MM:SS.
-// Hours are not capped (e.g., 100:05:09 for long uptimes).
-func FormatSecondsHMS(seconds int64) string {
-	var rowFormat = "%02d:%02d:%02d"
+func FormatOptionalUptime(seconds int64, available bool) string {
+	if !available {
+		return "n/a"
+	}
 
-	if seconds <= 0 {
-		return fmt.Sprintf(rowFormat, 0, 0, 0)
+	return formatSecondsHMS(seconds)
+}
+
+// formatSecondsHMS converts seconds into a compact uptime string.
+func formatSecondsHMS(seconds int64) string {
+	switch {
+	case seconds <= 0:
+		return "just now"
+	case seconds < 60:
+		return "just now"
+	case seconds < 3600:
+		return fmt.Sprintf("%dm", seconds/60)
 	}
 
 	h := seconds / 3600
 	rem := seconds % 3600
 	m := rem / 60
-	s := rem % 60
-	return fmt.Sprintf(rowFormat, h, m, s)
+	d := h / 24
+	h = h % 24
+	return fmt.Sprintf("%dd %02d:%02d", d, h, m)
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rowFormat = "%-20s %-10s %-10s\n"
+var rowFormat = "%-20s %-10s %10s\n"
 
 var listCmd = &cobra.Command{
 	Use:     "list",
@@ -47,10 +47,7 @@ var listCmd = &cobra.Command{
 				name = "<unknown>"
 			}
 
-			uptime := proxmox_utils.FormatSecondsHMS(n.Uptime)
-			if n.Status != proxmox_utils.ClusterStatusOnline {
-				uptime = "-"
-			}
+			uptime := proxmox_utils.FormatOptionalUptime(n.Uptime, n.Status == proxmox_utils.ClusterStatusOnline)
 
 			fmt.Printf(rowFormat, name, n.Status, uptime)
 		}

@@ -25,7 +25,7 @@ func sortVmByStatus(filteredVMs []proxmox.VM) func(i, j int) bool {
 	}
 }
 
-var rowFormat = "%-8s %-30s %-10s %-5s %-15s %-10s\n"
+var rowFormat = "%-8s %-30s %-10s %-5s %-15s %10s\n"
 
 var PsCmd = &cobra.Command{
 	Use:     "ps",
@@ -68,10 +68,7 @@ var PsCmd = &cobra.Command{
 				name = "<no name>"
 			}
 
-			uptime := proxmox_utils.FormatSecondsHMS(vm.Uptime)
-			if vm.Status != proxmox_utils.VmStatusRunning {
-				uptime = "-"
-			}
+			uptime := proxmox_utils.FormatOptionalUptime(vm.Uptime, vm.Status == proxmox_utils.VmStatusRunning)
 
 			fmt.Printf(rowFormat, strconv.Itoa(vm.ID), name, vm.Status, vm.TypeVM, vm.Node, uptime)
 		}
