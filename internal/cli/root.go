@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	commands_cluster "proxmox-cli/internal/cli/commands/cluster"
 	commands_vm "proxmox-cli/internal/cli/commands/vm"
@@ -25,7 +26,7 @@ const rootUsageTemplate = `{{header "USAGE"}}{{if .Runnable}}
 {{.Example}}{{end}}{{if .HasAvailableSubCommands}}{{$cmds := .Commands}}{{if eq (len .Groups) 0}}
 
 {{header "AVAILABLE COMMANDS"}}{{range $cmds}}{{if (and .IsAvailableCommand (ne .Name "completion") (ne .Name "help"))}}
-  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{if eq .CommandPath "proxmox-cli"}}
+  {{if or (eq $.CommandPath "proxmox-cli vm") (eq $.CommandPath "proxmox-cli cluster")}}{{rpad (aliasSet .) 30 }}{{else}}{{rpad .Name .NamePadding }}{{end}} {{.Short}}{{end}}{{end}}{{if eq .CommandPath "proxmox-cli"}}
 
 {{header "ADDITIONAL COMMANDS"}}{{range $cmds}}{{if (eq .Name "completion")}}
   {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{else}}{{range $group := .Groups}}
@@ -72,6 +73,13 @@ var rootCmd = &cobra.Command{
 func init() {
 	cobra.AddTemplateFunc("header", func(s string) string {
 		return "\x1b[1m" + s + "\x1b[0m"
+	})
+	cobra.AddTemplateFunc("aliasSet", func(cmd *cobra.Command) string {
+		if len(cmd.Aliases) == 0 {
+			return cmd.Name()
+		}
+
+		return cmd.Name() + ", " + strings.Join(cmd.Aliases, ", ")
 	})
 	rootCmd.SetUsageTemplate(rootUsageTemplate)
 
