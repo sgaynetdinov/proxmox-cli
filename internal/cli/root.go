@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	commands_cluster "proxmox-cli/internal/cli/commands/cluster"
+	commands_version "proxmox-cli/internal/cli/commands/version"
 	commands_vm "proxmox-cli/internal/cli/commands/vm"
 	clicontext "proxmox-cli/internal/cli/context"
 	"proxmox-cli/internal/cli/utils"
@@ -25,10 +26,10 @@ const rootUsageTemplate = `{{header "USAGE"}}{{if .Runnable}}
 {{header "EXAMPLES"}}
 {{.Example}}{{end}}{{if .HasAvailableSubCommands}}{{$cmds := .Commands}}{{if eq (len .Groups) 0}}
 
-{{header "AVAILABLE COMMANDS"}}{{range $cmds}}{{if (and .IsAvailableCommand (ne .Name "completion") (ne .Name "help"))}}
+{{header "AVAILABLE COMMANDS"}}{{range $cmds}}{{if (and .IsAvailableCommand (ne .Name "completion") (ne .Name "help") (ne .Name "version"))}}
   {{if or (eq $.CommandPath "proxmox-cli vm") (eq $.CommandPath "proxmox-cli cluster")}}{{rpad (aliasSet .) 30 }}{{else}}{{rpad .Name .NamePadding }}{{end}} {{.Short}}{{end}}{{end}}{{if eq .CommandPath "proxmox-cli"}}
 
-{{header "ADDITIONAL COMMANDS"}}{{range $cmds}}{{if (eq .Name "completion")}}
+{{header "ADDITIONAL COMMANDS"}}{{range $cmds}}{{if (or (eq .Name "completion") (eq .Name "version"))}}
   {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{else}}{{range $group := .Groups}}
 
 {{header .Title}}{{range $cmds}}{{if (and (eq .GroupID $group.ID) .IsAvailableCommand (ne .Name "help"))}}
@@ -88,9 +89,14 @@ func init() {
 
 	// VM commands
 	rootCmd.AddCommand(commands_vm.VmCmd)
+
+	// Version commands
+	rootCmd.AddCommand(commands_version.VersionCmd)
 }
 
-func Execute() {
+func Execute(version, gitCommit string) {
+	commands_version.SetBuildInfo(version, gitCommit)
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
