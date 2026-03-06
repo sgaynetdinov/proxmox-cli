@@ -79,12 +79,7 @@ func init() {
 	rootCmd.AddCommand(commands_cluster.ClusterCmd)
 
 	// VM commands
-	rootCmd.AddCommand(commands_vm.PsCmd)
-	rootCmd.AddCommand(commands_vm.StartCmd)
-	rootCmd.AddCommand(commands_vm.StopCmd)
-	rootCmd.AddCommand(commands_vm.ShutdownCmd)
-	rootCmd.AddCommand(commands_vm.ResetCmd)
-	rootCmd.AddCommand(commands_vm.RebootCmd)
+	rootCmd.AddCommand(commands_vm.VmCmd)
 }
 
 func Execute() {
